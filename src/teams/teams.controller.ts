@@ -11,8 +11,13 @@ export class TeamsController {
     return this.teamsService.create(body);
   }
 
+  // @Get()
+  // findAll() {
+  //   return this.teamsService.findAll();
+  // }
+
   @Get()
-  findAl() {
-    return this.teamsService.findAll();
+  drafTeams() {
+    return this.teamsService.sortTeam();
   }
 }

@@ -4,4 +4,7 @@ export class CreatePlayerDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  goals?: number;
+  average?: number;
 }

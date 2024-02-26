@@ -8,8 +8,11 @@ export class Player {
   @Prop({ required: [true, 'Name is required!!!'], trim: true })
   name: string;
 
-  // @Prop()
-  // username: string;
+  @Prop({ default: 0 })
+  goals: number;
+
+  @Prop({ default: 3 })
+  average: number;
 }
 
 export const PlayerSchema = SchemaFactory.createForClass(Player);
