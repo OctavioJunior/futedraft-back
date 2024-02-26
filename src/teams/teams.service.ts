@@ -31,45 +31,28 @@ export class TeamsService {
     return this.teamModel.find();
   }
 
-  async sortTeam() {
+  async sortTeam(teamsQuantity: number) {
+    if (teamsQuantity <= 0) {
+      throw new Error('Número inválido de equipes');
+    }
+
     const players = await this.playersService.findAll();
     const sortedPlayers = players.sort((a, b) => b.average - a.average);
 
-    // const numberOfTeams = teamsQuantity;
+    const teams: Player[][] = new Array(teamsQuantity).fill([]).map(() => []);
+    const totals: number[] = new Array(teamsQuantity).fill(0);
 
-    const team1: Player[] = [];
-    const team2: Player[] = [];
-
-    let totalTeam1 = 0;
-    let totalTeam2 = 0;
-
-    sortedPlayers.forEach((player, index) => {
-      if (index % 2 === 0) {
-        team1.push(player);
-        totalTeam1 += player.average;
-      } else {
-        team2.push(player);
-        totalTeam2 += player.average;
-      }
+    sortedPlayers.forEach((player) => {
+      const minTotalIndex = totals.indexOf(Math.min(...totals));
+      teams[minTotalIndex].push(player);
+      totals[minTotalIndex] += player.average;
     });
 
-    if (team1.length > team2.length) {
-      const playerToMove = team1.pop();
-      team2.push(playerToMove);
-      totalTeam1 -= playerToMove.average;
-      totalTeam2 += playerToMove.average;
-    } else if (team2.length > team1.length) {
-      const playerToMove = team2.pop();
-      team1.push(playerToMove);
-      totalTeam2 -= playerToMove.average;
-      totalTeam1 += playerToMove.average;
-    }
+    const averages = totals.map((total, index) => total / teams[index].length);
 
     return {
-      team1,
-      team2,
-      averageTeam1: totalTeam1 / team1.length,
-      averageTeam2: totalTeam2 / team2.length,
+      teams,
+      averages,
     };
   }
 }

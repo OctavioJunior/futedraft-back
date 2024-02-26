@@ -18,6 +18,6 @@ export class TeamsController {
 
   @Get()
   drafTeams() {
-    return this.teamsService.sortTeam();
+    return this.teamsService.sortTeam(2);
   }
 }
